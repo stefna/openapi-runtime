@@ -74,8 +74,9 @@ abstract class AbstractService implements LoggerAwareInterface
 		throw new RequestFailed('Failed to query api', 0, $e ?? null);
 	}
 
-	protected function parseResponse(ResponseInterface $response): array
+	protected function parseResponse(ResponseInterface $response)
 	{
-		return [];
+		//todo implement
+		return null;
 	}
 }
