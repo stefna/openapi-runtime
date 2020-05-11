@@ -4,19 +4,6 @@ namespace Stefna\OpenApiRuntime\Exceptions;
 
 use Psr\Http\Message\ResponseInterface;
 
-final class NotFound extends \RuntimeException implements OpenApiResponseException
+final class NotFound extends DescriptionException
 {
-	/** @var ResponseInterface */
-	private $response;
-
-	public function __construct(?string $message, ResponseInterface $response)
-	{
-		parent::__construct($message ?? 'Resource not found');
-		$this->response = $response;
-	}
-
-	public function getResponse(): ResponseInterface
-	{
-		return $this->response;
-	}
 }
