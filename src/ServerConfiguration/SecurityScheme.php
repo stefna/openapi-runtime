@@ -15,5 +15,5 @@ interface SecurityScheme
 	/**
 	 * @return static
 	 */
-	public static function createFromSchemaArray(string $name, array $schema);
+	public static function createFromSchemeArray(string $name, array $scheme);
 }

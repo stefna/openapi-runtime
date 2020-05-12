@@ -11,18 +11,18 @@ final class HttpSecurityScheme implements SecurityScheme
 	/** @var string */
 	private $type;
 	/** @var string */
-	private $schema;
+	private $scheme;
 
-	public static function createFromSchemaArray(string $name, array $schema)
+	public static function createFromSchemeArray(string $name, array $scheme)
 	{
-		return new self($name, $schema['type'], $schema['schema']);
+		return new self($name, $scheme['type'], $scheme['schema']);
 	}
 
 	public function __construct(string $name, string $type, string $schema)
 	{
 		$this->ref = $name;
 		$this->type = $type;
-		$this->schema = $schema;
+		$this->scheme = $schema;
 	}
 
 	public function getRef(): string
@@ -37,10 +37,10 @@ final class HttpSecurityScheme implements SecurityScheme
 
 	public function configure(RequestInterface $request, string $securityValue): RequestInterface
 	{
-		if ($this->schema === 'basic') {
+		if ($this->scheme === 'basic') {
 			return $request->withHeader('Authorization', 'Basic ' . $securityValue);
 		}
-		if ($this->schema === 'bearer') {
+		if ($this->scheme === 'bearer') {
 			return $request->withHeader('Authorization', 'Bearer ' . $securityValue);
 		}
 		return $request;

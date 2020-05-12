@@ -13,9 +13,9 @@ final class ApiKeySecurityScheme implements SecurityScheme
 	/** @var string */
 	private $in;
 
-	public static function createFromSchemaArray(string $name, array $schema): self
+	public static function createFromSchemeArray(string $name, array $scheme): self
 	{
-		return new self($name, $schema['name'], $schema['in']);
+		return new self($name, $scheme['name'], $scheme['in']);
 	}
 
 	public function __construct(string $ref, string $name, string $in)

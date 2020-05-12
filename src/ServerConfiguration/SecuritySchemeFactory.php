@@ -9,13 +9,13 @@ final class SecuritySchemeFactory
 	/**
 	 * @return SecurityScheme
 	 */
-	public static function createFromSchemaArray(string $name, array $schema): SecurityScheme
+	public static function createFromSchemeArray(string $name, array $scheme): SecurityScheme
 	{
-		if ($schema['type'] === 'apiKey') {
-			return ApiKeySecurityScheme::createFromSchemaArray($name, $schema);
+		if ($scheme['type'] === 'apiKey') {
+			return ApiKeySecurityScheme::createFromSchemeArray($name, $scheme);
 		}
-		if ($schema['type'] === 'http') {
-			return HttpSecurityScheme::createFromSchemaArray($name, $schema);
+		if ($scheme['type'] === 'http') {
+			return HttpSecurityScheme::createFromSchemeArray($name, $scheme);
 		}
 		throw new UnknownSecuritySchema($name);
 	}
