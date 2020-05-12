@@ -35,9 +35,9 @@ final class ApiKeySecurityScheme implements SecurityScheme
 		return 'apiKey';
 	}
 
-	public function configure(RequestInterface $request, SecurityValueInterface $securityValue): RequestInterface
+	public function configure(RequestInterface $request, ?SecurityValueInterface $securityValue): RequestInterface
 	{
-		if ($this->in === 'header') {
+		if ($this->in === 'header' && $securityValue) {
 			return $request->withHeader($this->name, $securityValue->toString());
 		}
 

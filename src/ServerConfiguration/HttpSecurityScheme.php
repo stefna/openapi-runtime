@@ -35,8 +35,12 @@ final class HttpSecurityScheme implements SecurityScheme
 		return $this->type;
 	}
 
-	public function configure(RequestInterface $request, SecurityValueInterface $securityValue): RequestInterface
+	public function configure(RequestInterface $request, ?SecurityValueInterface $securityValue): RequestInterface
 	{
+		if (!$securityValue) {
+			//todo log?
+			return $request;
+		}
 		if ($this->scheme === 'basic') {
 			return $request->withHeader('Authorization', 'Basic ' . $securityValue->toString());
 		}
