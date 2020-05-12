@@ -8,4 +8,5 @@ interface EndpointInterface
 	public function getRequestBody(): array;
 	public function getPath(): string;
 	public function getMethod(): string;
+	public function getSecurity(): string;
 }

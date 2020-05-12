@@ -9,21 +9,14 @@ abstract class AbstractServerConfiguration implements ServerConfigurationInterfa
 {
 	abstract protected function getSecurityValue(): string;
 
-	abstract protected function getSecuritySchema(): ?SecurityScheme;
+	abstract protected function getSecuritySchema(string $ref): ?SecurityScheme;
 
-	public function configureAuthentication(RequestInterface $request): RequestInterface
+	public function configureAuthentication(RequestInterface $request, string $securitySchemaRef): RequestInterface
 	{
-		$security = $this->getSecuritySchema();
+		$security = $this->getSecuritySchema($securitySchemaRef);
 		if (!$security) {
 			return $request;
 		}
-
-		if ($security->getIn() === 'header') {
-			return $request->withHeader($security->getName(), $this->getSecurityValue());
-		}
-
-		//todo handle more types of security
-
-		return $request;
+		return $security->configure($request, $this->getSecurityValue());
 	}
 }

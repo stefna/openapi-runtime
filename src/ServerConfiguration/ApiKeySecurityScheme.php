@@ -8,12 +8,15 @@ final class ApiKeySecurityScheme implements SecurityScheme
 {
 	/** @var string */
 	private $ref;
-
 	/** @var string */
 	private $name;
-
 	/** @var string */
 	private $in;
+
+	public static function createFromSchemaArray(string $name, array $schema): self
+	{
+		return new self($name, $schema['name'], $schema['in']);
+	}
 
 	public function __construct(string $ref, string $name, string $in)
 	{
@@ -27,13 +30,19 @@ final class ApiKeySecurityScheme implements SecurityScheme
 		return $this->ref;
 	}
 
-	public function getName(): string
+	public function getType(): string
 	{
-		return $this->name;
+		return 'apiKey';
 	}
 
-	public function getIn(): string
+	public function configure(RequestInterface $request, string $securityValue): RequestInterface
 	{
-		return $this->in;
+		if ($this->in === 'header') {
+			return $request->withHeader($this->name, $securityValue);
+		}
+
+		//todo handle more types of security
+
+		return $request;
 	}
 }

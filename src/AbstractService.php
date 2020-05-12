@@ -60,7 +60,7 @@ abstract class AbstractService implements LoggerAwareInterface
 		}
 		$request = $request->withUri($uri);
 
-		$request = $this->serverConfiguration->configureAuthentication($request);
+		$request = $this->serverConfiguration->configureAuthentication($request, $endpoint->getSecurity());
 
 		try {
 			return $this->client->sendRequest($request);

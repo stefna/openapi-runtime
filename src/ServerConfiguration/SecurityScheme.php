@@ -8,7 +8,12 @@ interface SecurityScheme
 {
 	public function getRef(): string;
 
-	public function getName(): string;
+	public function getType(): string;
 
-	public function getIn(): string;
+	public function configure(RequestInterface $request, string $securityValue): RequestInterface;
+
+	/**
+	 * @return static
+	 */
+	public static function createFromSchemaArray(string $name, array $schema);
 }
