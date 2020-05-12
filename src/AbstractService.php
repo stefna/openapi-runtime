@@ -8,6 +8,7 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Stefna\OpenApiRuntime\Exceptions\MalformedResponse;
 use Stefna\OpenApiRuntime\Exceptions\RequestFailed;
 
 abstract class AbstractService implements LoggerAwareInterface
@@ -76,7 +77,10 @@ abstract class AbstractService implements LoggerAwareInterface
 
 	protected function parseResponse(ResponseInterface $response)
 	{
-		//todo implement
-		return null;
+		$json = json_decode((string)$response->getBody(), true);
+		if (!$json) {
+			throw new MalformedResponse($response);
+		}
+		return $json;
 	}
 }

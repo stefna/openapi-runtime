@@ -13,9 +13,9 @@ final class HttpSecurityScheme implements SecurityScheme
 	/** @var string */
 	private $scheme;
 
-	public static function createFromSchemeArray(string $name, array $scheme)
+	public static function createFromSchemeArray(string $name, array $scheme): self
 	{
-		return new self($name, $scheme['type'], $scheme['schema']);
+		return new self($name, $scheme['type'], $scheme['scheme']);
 	}
 
 	public function __construct(string $name, string $type, string $schema)
