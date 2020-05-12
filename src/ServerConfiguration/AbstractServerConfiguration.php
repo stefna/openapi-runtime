@@ -7,7 +7,7 @@ use Stefna\OpenApiRuntime\ServerConfigurationInterface;
 
 abstract class AbstractServerConfiguration implements ServerConfigurationInterface
 {
-	abstract protected function getSecurityValue(string $ref): string;
+	abstract protected function getSecurityValue(string $ref): SecurityValueInterface;
 
 	abstract protected function getSecurityScheme(string $ref): ?SecurityScheme;
 

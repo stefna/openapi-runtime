@@ -10,7 +10,7 @@ interface SecurityScheme
 
 	public function getType(): string;
 
-	public function configure(RequestInterface $request, string $securityValue): RequestInterface;
+	public function configure(RequestInterface $request, SecurityValueInterface $securityValue): RequestInterface;
 
 	/**
 	 * @return static
