@@ -2,7 +2,6 @@
 
 namespace Stefna\OpenApiRuntime\ServerConfiguration;
 
-use Cassandra\Schema;
 use Stefna\OpenApiRuntime\Exceptions\UnknownSecuritySchema;
 
 final class SecuritySchemeFactory
@@ -10,7 +9,7 @@ final class SecuritySchemeFactory
 	/**
 	 * @return SecurityScheme
 	 */
-	public static function createFromSchemaArray(string $name, array $schema): Schema
+	public static function createFromSchemaArray(string $name, array $schema): SecurityScheme
 	{
 		if ($schema['type'] === 'apiKey') {
 			return ApiKeySecurityScheme::createFromSchemaArray($name, $schema);
