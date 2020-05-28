@@ -25,6 +25,11 @@ final class SecurityValue implements SecurityValueInterface
 		return new self($key);
 	}
 
+	public static function empty(): self
+	{
+		return new self('');
+	}
+
 	public function __construct(string $value)
 	{
 		$this->value = $value;
