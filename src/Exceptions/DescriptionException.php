@@ -9,6 +9,18 @@ class DescriptionException extends \RuntimeException implements OpenApiResponseE
 	/** @var ResponseInterface */
 	private $response;
 
+	private $model;
+
+	/**
+	 * @return static
+	 */
+	public static function fromModel($model, string $message, ResponseInterface $response)
+	{
+		$self = new static($message, $response);
+		$self->model = $model;
+		return $self;
+	}
+
 	public function __construct(string $message, ResponseInterface $response)
 	{
 		parent::__construct($message);
@@ -18,5 +30,10 @@ class DescriptionException extends \RuntimeException implements OpenApiResponseE
 	public function getResponse(): ResponseInterface
 	{
 		return $this->response;
+	}
+
+	public function getModel()
+	{
+		return $this->model;
 	}
 }
