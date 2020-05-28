@@ -4,12 +4,10 @@ namespace Stefna\OpenApiRuntime;
 
 use Psr\Http\Message\ResponseInterface;
 
-interface ModelInterface
+interface ModelInterface extends RequestBodyInterface
 {
-	public function toRequestData(): array;
-
 	/**
 	 * @return static
 	 */
-	public static function fromResponse(array $data, ResponseInterface $response = null);
+	public static function fromResponse(array $data, ResponseInterface $response);
 }
