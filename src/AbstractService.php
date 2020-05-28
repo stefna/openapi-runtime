@@ -18,7 +18,7 @@ abstract class AbstractService implements LoggerAwareInterface
 	/** @var ClientInterface */
 	protected $client;
 	/** @var ServerConfigurationInterface */
-	private $serverConfiguration;
+	protected $serverConfiguration;
 	/** @var RequestFactoryInterface */
 	private $requestFactory;
 
