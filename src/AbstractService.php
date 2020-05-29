@@ -78,7 +78,7 @@ abstract class AbstractService implements LoggerAwareInterface
 	protected function parseResponse(ResponseInterface $response)
 	{
 		$json = json_decode((string)$response->getBody(), true);
-		if (!$json) {
+		if ($json === false) {
 			throw new MalformedResponse($response);
 		}
 		return $json;
