@@ -40,8 +40,19 @@ final class ApiKeySecurityScheme implements SecurityScheme
 		if ($this->in === 'header' && $securityValue) {
 			return $request->withHeader($this->name, $securityValue->toString());
 		}
+		if ($this->in === 'query' && $securityValue) {
+			$uri = $request->getUri();
+			$query = $uri->getQuery();
+			if (!$query) {
+				$query = http_build_query([$this->name => $securityValue->toString()]);
+			}
+			else {
+				$query .= '&' . $this->name . '=' . urlencode($securityValue);
+			}
+			return $request->withUri($uri->withQuery($query));
+		}
 
-		//todo handle more types of security
+		//todo handle in coookie
 
 		return $request;
 	}
