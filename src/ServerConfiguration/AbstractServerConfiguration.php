@@ -3,6 +3,7 @@
 namespace Stefna\OpenApiRuntime\ServerConfiguration;
 
 use Psr\Http\Message\RequestInterface;
+use Stefna\OpenApiRuntime\EndpointInterface;
 use Stefna\OpenApiRuntime\ServerConfigurationInterface;
 
 abstract class AbstractServerConfiguration implements ServerConfigurationInterface
@@ -11,7 +12,18 @@ abstract class AbstractServerConfiguration implements ServerConfigurationInterfa
 
 	abstract protected function getSecurityScheme(string $ref): ?SecurityScheme;
 
-	public function configureAuthentication(RequestInterface $request, string $securitySchemaRef): RequestInterface
+	public function configureAuthentication(RequestInterface $request, EndpointInterface $endpoint): RequestInterface
+	{
+		if (!count($endpoint->getSecurity())) {
+			return $this->configureSecuritySchema($request, $endpoint->getDefaultSecurity());
+		}
+		foreach ($endpoint->getSecurity() as $schema) {
+			$request = $this->configureSecuritySchema($request, $schema);
+		}
+		return $request;
+	}
+
+	private function configureSecuritySchema(RequestInterface $request, string $securitySchemaRef): RequestInterface
 	{
 		$security = $this->getSecurityScheme($securitySchemaRef);
 		if (!$security) {

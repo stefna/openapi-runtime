@@ -37,7 +37,7 @@ final class HttpSecurityScheme implements SecurityScheme
 
 	public function configure(RequestInterface $request, ?SecurityValueInterface $securityValue): RequestInterface
 	{
-		if (!$securityValue) {
+		if (!$securityValue || !$securityValue->toString()) {
 			//todo log?
 			return $request;
 		}

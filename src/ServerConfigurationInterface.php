@@ -8,5 +8,5 @@ interface ServerConfigurationInterface
 {
 	public function getBaseUri(): string;
 
-	public function configureAuthentication(RequestInterface $request, string $securitySchema): RequestInterface;
+	public function configureAuthentication(RequestInterface $request, EndpointInterface $endpoint): RequestInterface;
 }

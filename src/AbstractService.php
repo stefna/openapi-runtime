@@ -57,13 +57,15 @@ abstract class AbstractService implements LoggerAwareInterface
 			$body->write((string)json_encode($bodyParams));
 			$body->rewind();
 			$request = $request->withHeader('Content-Type', 'application/json');
+			echo json_encode($bodyParams, JSON_PRETTY_PRINT);
 			$request = $request->withBody($body);
 		}
 		$request = $request->withUri($uri);
 
-		$request = $this->serverConfiguration->configureAuthentication($request, $endpoint->getSecurity());
+		$request = $this->serverConfiguration->configureAuthentication($request, $endpoint);
 
 		try {
+			var_dump($request->getHeaders());
 			return $this->client->sendRequest($request);
 		}
 		catch (ClientExceptionInterface $e) {
