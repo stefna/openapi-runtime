@@ -21,6 +21,8 @@ abstract class AbstractService implements LoggerAwareInterface
 	protected $serverConfiguration;
 	/** @var RequestFactoryInterface */
 	private $requestFactory;
+	/** @var ResponseInterface|null */
+	private $lastResponse;
 
 	/**
 	 * @return static
@@ -64,7 +66,9 @@ abstract class AbstractService implements LoggerAwareInterface
 		$request = $this->serverConfiguration->configureAuthentication($request, $endpoint);
 
 		try {
-			return $this->client->sendRequest($request);
+			$response = $this->client->sendRequest($request);
+			$this->lastResponse = $response;
+			return $response;
 		}
 		catch (ClientExceptionInterface $e) {
 			$this->logger && $this->logger->info('Error talking to api', [
@@ -86,5 +90,10 @@ abstract class AbstractService implements LoggerAwareInterface
 			throw new MalformedResponse($response);
 		}
 		return $json;
+	}
+
+	public function getLastResponse()
+	{
+		return $this->lastResponse;
 	}
 }
