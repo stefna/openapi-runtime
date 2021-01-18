@@ -96,7 +96,7 @@ abstract class AbstractService implements LoggerAwareInterface
 		return $json;
 	}
 
-	public function getLastResponse()
+	public function getLastResponse(): ?ResponseInterface
 	{
 		return $this->lastResponse;
 	}
