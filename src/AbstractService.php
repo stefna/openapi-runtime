@@ -5,6 +5,7 @@ namespace Stefna\OpenApiRuntime;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -23,6 +24,8 @@ abstract class AbstractService implements LoggerAwareInterface
 	private $requestFactory;
 	/** @var ResponseInterface|null */
 	private $lastResponse;
+	/** @var RequestInterface|null */
+	private $lastRequest;
 
 	/**
 	 * @return static
@@ -66,6 +69,7 @@ abstract class AbstractService implements LoggerAwareInterface
 		$request = $this->serverConfiguration->configureAuthentication($request, $endpoint);
 
 		try {
+			$this->lastRequest = $request;
 			$response = $this->client->sendRequest($request);
 			$this->lastResponse = $response;
 			return $response;
@@ -92,8 +96,13 @@ abstract class AbstractService implements LoggerAwareInterface
 		return $json;
 	}
 
-	public function getLastResponse()
+	public function getLastResponse(): ?ResponseInterface
 	{
 		return $this->lastResponse;
+	}
+
+	public function getLastRequest(): ?RequestInterface
+	{
+		return $this->lastRequest;
 	}
 }
