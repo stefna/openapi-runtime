@@ -37,11 +37,29 @@ abstract class AbstractService implements LoggerAwareInterface
 		return new static($serverConfiguration, $factory->createPsr18Client(), $factory->createRequestFactory());
 	}
 
-	public function __construct(ServerConfigurationInterface $serverConfiguration, ClientInterface $client, RequestFactoryInterface $requestFactory)
-	{
+	public function __construct(
+		ServerConfigurationInterface $serverConfiguration,
+		ClientInterface $client,
+		RequestFactoryInterface $requestFactory
+	) {
 		$this->serverConfiguration = $serverConfiguration;
 		$this->client = $client;
 		$this->requestFactory = $requestFactory;
+	}
+
+	public function getServerConfiguration(): ServerConfigurationInterface
+	{
+		return $this->serverConfiguration;
+	}
+
+	/**
+	 * @return static
+	 */
+	public function withServerConfiguration(ServerConfigurationInterface $serverConfiguration)
+	{
+		$self = clone $this;
+		$self->serverConfiguration = $serverConfiguration;
+		return $self;
 	}
 
 	protected function doRequest(EndpointInterface $endpoint): ResponseInterface
