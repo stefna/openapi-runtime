@@ -108,7 +108,7 @@ abstract class AbstractService implements LoggerAwareInterface
 			return [];
 		}
 		$json = json_decode($body, true);
-		if ($json === false) {
+		if ($json === null) {
 			throw new MalformedResponse($response);
 		}
 		return $json;
