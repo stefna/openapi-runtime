@@ -70,9 +70,15 @@ abstract class AbstractService implements LoggerAwareInterface
 		$uri = $request->getUri();
 
 		$queryParams = $endpoint->getQueryParams();
+		$headerParams = method_exists($endpoint, 'getHeaders') ? $endpoint->getHeaders() : [];
 		$bodyParams = $endpoint->getRequestBody();
 		if ($queryParams) {
 			$uri = $uri->withQuery(http_build_query($queryParams));
+		}
+		if ($headerParams) {
+			foreach ($headerParams as $key => $value) {
+				$request->withHeader($key, $value);
+			}
 		}
 		if ($bodyParams) {
 			$body = $request->getBody();
