@@ -47,6 +47,9 @@ final class HttpSecurityScheme implements SecurityScheme
 		if ($this->scheme === 'bearer') {
 			return $request->withHeader('Authorization', 'Bearer ' . $securityValue->toString());
 		}
+		if ($this->scheme) {
+			return $request->withHeader('Authorization', $this->scheme . ' ' . $securityValue->toString());
+		}
 		return $request;
 	}
 }
