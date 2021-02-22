@@ -77,7 +77,7 @@ abstract class AbstractService implements LoggerAwareInterface
 		}
 		if ($headerParams) {
 			foreach ($headerParams as $key => $value) {
-				$request->withHeader($key, $value);
+				$request = $request->withHeader($key, $value);
 			}
 		}
 		if ($bodyParams) {
