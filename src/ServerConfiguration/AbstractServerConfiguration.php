@@ -25,6 +25,9 @@ abstract class AbstractServerConfiguration implements ServerConfigurationInterfa
 
 	private function configureSecuritySchema(RequestInterface $request, string $securitySchemaRef): RequestInterface
 	{
+		if ($securitySchemaRef === SecurityScheme::NO_SECURITY) {
+			return $request;
+		}
 		$security = $this->getSecurityScheme($securitySchemaRef);
 		if (!$security) {
 			return $request;

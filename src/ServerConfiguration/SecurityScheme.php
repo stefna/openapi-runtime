@@ -6,6 +6,8 @@ use Psr\Http\Message\RequestInterface;
 
 interface SecurityScheme
 {
+	public const NO_SECURITY = '__NO_SECURITY__';
+
 	public function getRef(): string;
 
 	public function getType(): string;
