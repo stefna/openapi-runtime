@@ -4,7 +4,9 @@ namespace Stefna\OpenApiRuntime;
 
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 trait MockServiceTrait
 {
@@ -12,6 +14,10 @@ trait MockServiceTrait
 	private $executeHandler;
 	/** @var array<string, ResponseInterface> */
 	private $responseMap = [];
+	/** @var ResponseFactoryInterface */
+	private $responseFactory;
+	/** @var StreamFactoryInterface */
+	private $streamFactory;
 
 	public function setExecuteHandler(\Closure $handler)
 	{
@@ -26,6 +32,12 @@ trait MockServiceTrait
 
 	protected function executeRequest(RequestInterface $request): ResponseInterface
 	{
+		if (!$this->responseFactory) {
+			$factory = new Factory();
+			$this->responseFactory = $factory->createResponseFactory();
+			$this->streamFactory = $factory->createStreamFactory();
+		}
+
 		if ($this->executeHandler) {
 			$handler = \Closure::bind($this->executeHandler, $this);
 			return $handler($request);
@@ -36,5 +48,11 @@ trait MockServiceTrait
 		}
 
 		throw new class ('No handler or response found for path') extends \RuntimeException implements ClientExceptionInterface {};
+	}
+
+	private function createResponseFromArray(array $data): ResponseInterface
+	{
+		$stream = $this->streamFactory->createStream((string)json_encode($data));
+		return $this->responseFactory->createResponse()->withBody($stream);
 	}
 }
