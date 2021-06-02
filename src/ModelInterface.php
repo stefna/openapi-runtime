@@ -4,6 +4,9 @@ namespace Stefna\OpenApiRuntime;
 
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @deprecated use ModelResponseFactoryInterface
+ */
 interface ModelInterface extends RequestBodyInterface
 {
 	/**
