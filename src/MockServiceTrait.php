@@ -10,14 +10,14 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 trait MockServiceTrait
 {
+	/** @var ResponseFactoryInterface */
+	public $responseFactory;
+	/** @var StreamFactoryInterface */
+	public $streamFactory;
 	/** @var \Closure|null */
 	private $executeHandler;
 	/** @var array<string, ResponseInterface> */
 	private $responseMap = [];
-	/** @var ResponseFactoryInterface */
-	private $responseFactory;
-	/** @var StreamFactoryInterface */
-	private $streamFactory;
 
 	public function setExecuteHandler(\Closure $handler)
 	{
@@ -30,16 +30,25 @@ trait MockServiceTrait
 		return $this;
 	}
 
+	public function addToResponseMapFromEndpoint(EndpointInterface $endpoint, ResponseInterface $response): self
+	{
+		return $this->addToResponseMap($endpoint->getPath(), $response);
+	}
+
+	public function createResponseFromArray(array $data): ResponseInterface
+	{
+		$this->needFactories();
+
+		$stream = $this->streamFactory->createStream((string)json_encode($data));
+		return $this->responseFactory->createResponse()->withBody($stream);
+	}
+
 	protected function executeRequest(RequestInterface $request): ResponseInterface
 	{
-		if (!$this->responseFactory) {
-			$factory = new Factory();
-			$this->responseFactory = $factory->createResponseFactory();
-			$this->streamFactory = $factory->createStreamFactory();
-		}
+		$this->needFactories();
 
 		if ($this->executeHandler) {
-			$handler = \Closure::bind($this->executeHandler, $this);
+			$handler = \Closure::bind($this->executeHandler, $this, $this);
 			return $handler($request);
 		}
 		$pathKey = $request->getUri()->getPath();
@@ -50,9 +59,12 @@ trait MockServiceTrait
 		throw new class ('No handler or response found for path') extends \RuntimeException implements ClientExceptionInterface {};
 	}
 
-	private function createResponseFromArray(array $data): ResponseInterface
+	private function needFactories(): void
 	{
-		$stream = $this->streamFactory->createStream((string)json_encode($data));
-		return $this->responseFactory->createResponse()->withBody($stream);
+		if (!$this->responseFactory) {
+			$factory = new Factory();
+			$this->responseFactory = $factory->createResponseFactory();
+			$this->streamFactory = $factory->createStreamFactory();
+		}
 	}
 }
