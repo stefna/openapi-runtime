@@ -9,7 +9,9 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Laminas\Diactoros\RequestFactory as LaminasRequestFactory;
 use Laminas\Diactoros\ResponseFactory as LaminasResponseFactory;
+use Laminas\Diactoros\StreamFactory as LaminasStreamFactory;
 use Nyholm\Psr7\Factory\Psr17Factory as NyholmFactory;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class Factory implements FactoryInterface
 {
@@ -51,5 +53,17 @@ class Factory implements FactoryInterface
 		}
 
 		throw new \RuntimeException('No response factory found. Try installing "laminas/laminas-diactoros"');
+	}
+
+	public function createStreamFactory(): StreamFactoryInterface
+	{
+		if (class_exists(LaminasStreamFactory::class)) {
+			return new LaminasStreamFactory();
+		}
+		if (class_exists(NyholmFactory::class)) {
+			return new NyholmFactory();
+		}
+
+		throw new \RuntimeException('No stream factory found. Try installing "laminas/laminas-diactoros"');
 	}
 }

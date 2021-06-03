@@ -94,7 +94,7 @@ abstract class AbstractService implements LoggerAwareInterface
 
 		try {
 			$this->lastRequest = $request;
-			$response = $this->client->sendRequest($request);
+			$response = $this->executeRequest($request);
 			$this->lastResponse = $response;
 			return $response;
 		}
@@ -105,6 +105,11 @@ abstract class AbstractService implements LoggerAwareInterface
 		}
 
 		throw new RequestFailed('Failed to query api', 0, $e ?? null);
+	}
+
+	protected function executeRequest(RequestInterface $request): ResponseInterface
+	{
+		return $this->client->sendRequest($request);
 	}
 
 	protected function parseResponse(ResponseInterface $response)
