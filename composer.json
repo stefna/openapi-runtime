@@ -1,25 +1,29 @@
 {
-    "name": "stefna/open-api-runtime",
-    "description": "Base package for open api clients",
-    "license": "proprietary",
-    "type": "library",
-    "authors": [
-        {
-            "name": "Andreas Sundqvist",
-            "email": "andreas@stefna.is"
-        }
-    ],
-    "require": {
-        "psr/http-client": "^1.0",
-        "psr/http-message": "^1.0",
-        "psr/http-factory": "^1.0",
-        "psr/log": "^1.1",
-        "sunkan/enum": "^1.3.0",
-        "ramsey/uuid": "^3.0|^4.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Stefna\\OpenApiRuntime\\": "src/"
-        }
-    }
+	"name": "stefna/open-api-runtime",
+	"description": "Base package for open api clients",
+	"license": "MIT",
+	"type": "library",
+	"authors": [
+		{
+			"name": "Andreas Sundqvist",
+			"email": "andreas@stefna.is"
+		}
+	],
+	"require": {
+		"psr/http-client": "^1.0",
+		"psr/http-message": "^1.0",
+		"psr/http-factory": "^1.0",
+		"psr/log": "^1.1",
+		"sunkan/enum": "^1.3.0",
+		"ramsey/uuid": "^3.0 || ^4.0"
+	},
+	"suggest": {
+		"nyholm/psr7": "For psr-7 and psr-17 implemenations",
+		"kriswallsmith/buzz": "For psr-18 implemenation"
+	},
+	"autoload": {
+		"psr-4": {
+			"Stefna\\OpenApiRuntime\\": "src/"
+		}
+	}
 }
