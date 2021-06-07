@@ -27,7 +27,11 @@ class Factory implements FactoryInterface
 	private function createBuzzClient(): ClientInterface
 	{
 		$requestFactory = $this->createRequestFactory();
-		$curl = new Curl($this->createResponseFactory());
+		$curl = new Curl($this->createResponseFactory(), [
+			'curl' => [
+				\CURLOPT_USERAGENT => 'Stefna Open Api Runtime 1.5.0',
+			],
+		]);
 		return new BuzzClient($curl, $requestFactory);
 	}
 
