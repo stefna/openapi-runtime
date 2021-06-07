@@ -17,6 +17,12 @@ final class SecuritySchemeFactory
 		if ($scheme['type'] === 'http') {
 			return HttpSecurityScheme::createFromSchemeArray($name, $scheme);
 		}
+		if ($scheme['type'] === 'oauth2') {
+			return HttpSecurityScheme::createFromSchemeArray($name, [
+				'type' => 'http',
+				'scheme' => 'bearer'
+			]);
+		}
 		throw new UnknownSecuritySchema($name);
 	}
 }
