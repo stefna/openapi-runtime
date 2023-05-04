@@ -9,6 +9,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Stefna\HttpClient\HttpFactory;
 use Stefna\OpenApiRuntime\Exceptions\MalformedResponse;
 use Stefna\OpenApiRuntime\Exceptions\RequestFailed;
 
@@ -16,25 +17,29 @@ abstract class AbstractService implements LoggerAwareInterface
 {
 	use LoggerAwareTrait;
 
-	/** @var ClientInterface */
-	protected $client;
-	/** @var ServerConfigurationInterface */
-	protected $serverConfiguration;
-	/** @var RequestFactoryInterface */
-	private $requestFactory;
-	/** @var ResponseInterface|null */
-	private $lastResponse;
-	/** @var RequestInterface|null */
-	private $lastRequest;
+	protected ClientInterface $client;
+	protected ServerConfigurationInterface $serverConfiguration;
+	private RequestFactoryInterface $requestFactory;
+	private ?ResponseInterface $lastResponse = null;
+	private ?RequestInterface $lastRequest = null;
 
 	/**
 	 * @return static
 	 */
-	public static function create(ServerConfigurationInterface $serverConfiguration, FactoryInterface $factory = null)
+	public static function create(ServerConfigurationInterface $serverConfiguration, HttpFactory $factory = null)
 	{
-		$factory = $factory ?? new Factory();
+		// this logic kinda don't make sense but run with it
+		if ($factory || class_exists(HttpFactory::class)) {
+			$requestFactory = $factory ?? new HttpFactory();
+			$client = $requestFactory->createClient();
+		}
+		else {
+			$factory = $factory ?? new Factory();
+			$requestFactory = $factory->createRequestFactory();
+			$client = $factory->createPsr18Client();
+		}
 
-		return new static($serverConfiguration, $factory->createPsr18Client(), $factory->createRequestFactory());
+		return new static($serverConfiguration, $client, $requestFactory);
 	}
 
 	public function __construct(
@@ -83,7 +88,7 @@ abstract class AbstractService implements LoggerAwareInterface
 		if ($bodyParams) {
 			$body = $request->getBody();
 			$body->rewind();
-			$body->write((string)json_encode($bodyParams));
+			$body->write(json_encode($bodyParams, JSON_THROW_ON_ERROR));
 			$body->rewind();
 			$request = $request->withHeader('Content-Type', 'application/json');
 			$request = $request->withBody($body);

@@ -13,6 +13,9 @@ use Laminas\Diactoros\StreamFactory as LaminasStreamFactory;
 use Nyholm\Psr7\Factory\Psr17Factory as NyholmFactory;
 use Psr\Http\Message\StreamFactoryInterface;
 
+/**
+ * @deprecated
+ */
 class Factory implements FactoryInterface
 {
 	public function createPsr18Client(): ClientInterface

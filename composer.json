@@ -10,12 +10,18 @@
 		}
 	],
 	"require": {
+		"php": "^7.4 || ^8.0",
+		"ext-json": "*",
 		"psr/http-client": "^1.0",
 		"psr/http-message": "^1.0",
 		"psr/http-factory": "^1.0",
 		"psr/log": "^1.1 || ^2.0 || ^3.0",
 		"sunkan/enum": "^1.3.0",
 		"ramsey/uuid": "^3.0 || ^4.0"
+	},
+	"require-dev": {
+		"stefna/codestyle": "^1.12.1",
+		"stefna/http-client": "^1.0"
 	},
 	"suggest": {
 		"nyholm/psr7": "For psr-7 and psr-17 implemenations",
